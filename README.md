@@ -15,8 +15,8 @@ documentation.
 
 ## Installation
 
-A "zip" file containing the database backup, installation instructions and
-an example, can be found on the [Releases](
+A "zip" file containing the database backup and installation instructions, can 
+be found on the [Releases](
 https://github.com/DTOcean/dtocean-database/releases) page of this repository.
 
 The database schema is stored in the repository as [schema.sql](
@@ -30,6 +30,9 @@ one of the following pages for further information:
  * [The DTOcean Installer](https://github.com/DTOcean/dtocean)
  * [dtocean-app](https://github.com/DTOcean/dtocean-app)
  * [dtocean-core](https://github.com/DTOcean/dtocean)
+
+See the "Getting Started 2: Example Database" chapter of the [DTOcean 
+documentation](https://dtocean.github.io/) for an example.
 
 ## Contributing
 
@@ -52,7 +55,8 @@ https://www.dtoceanplus.eu/About-DTOceanPlus/History) by:
 It is now maintained by Mathew Topper at [Data Only Greater](
 https://www.dataonlygreater.com/).
 
-The data was collected by the consortium members of the DTOcean project.
+Gratitude is given to [Sandia National Labs](https://www.sandia.gov/) for their
+help updating the example data. All new data was acquired from public sources.
 
 ## License
 
