@@ -1,0 +1,54 @@
+services:
+  database:
+    build:
+      context: postgresql
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DTOCEAN_USER_NAME: ${DTOCEAN_USER_NAME:-dtocean_user}
+      DTOCEAN_USER_PASSWORD: ${DTOCEAN_USER_PASSWORD}
+      DTOCEAN_DB_NAME: ${DTOCEAN_DB_NAME:-dtocean_examples}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./export:/home/postgres/export
+      - db-data:/var/lib/postgresql/data
+
+  pgadmin:
+    build:
+      context: pgadmin4
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-dtocean@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 8080:80
+    volumes:
+      - ./export:/home/pgadmin/export
+    configs:
+      - source: servers.json
+        target: /pgadmin4/servers.json
+      - source: pgpass
+        target: /pgpass
+
+configs:
+  pgpass:
+    content: "db:5432:*:postgres:$POSTGRES_PASSWORD"
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Group": "Servers",
+        "Name": "dtocean",
+        "Host": "database",
+        "Port": 5432,
+        "MaintenanceDB": "postgres",
+        "Username": "postgres",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }}}
+volumes:
+  db-data:
