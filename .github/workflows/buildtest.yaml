@@ -24,26 +24,31 @@ jobs:
           python-version: 3.12
       - name: Install poetry
         uses: abatilo/actions-poetry@v2
-      - name: Install package
+      - name: Install dependencies
         run: |
           poetry install
+      - name: Get dvc hash for export directory
+        run: |
+          echo "EXPORT_DVC_HASH=$(poetry run python get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
+      - name: Cache dvc directory
+        uses: actions/cache@v4
+        with:
+          path: .dvc
+          key: ${{ runner.os }}-${{ env.EXPORT_DVC_HASH }}
       - name: Pull database tables
         run: |
-          poetry run dvc pull
+          poetry run dvc pull -v
       - name: Set variables
         run: |
           echo "POSTGRES_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "DTOCEAN_USER_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "PGADMIN_DEFAULT_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "DTOCEAN_DB_VERSION=mock" >> $GITHUB_ENV
-      - name: Run Docker-compose
+      - name: Test for successful deployment
+        shell: bash
         run: |
-          docker-compose -f docker-compose.yml up -d
-          docker-compose -f docker-compose.yml ps
-      - name: Run Docker-compose
-        run: |
-          docker-compose -f docker-compose.yml up -d
-          docker-compose -f docker-compose.yml ps
-          sleep 30
-      - name: Stop and remove containers
-        run: docker-compose -f docker-compose.yml down
+          set +e
+          timeout --preserve-status 3m docker compose -f docker-compose.yml up --abort-on-container-failure
+          if [[ $? -ne 130 ]]; then
+            exit 1
+          fi

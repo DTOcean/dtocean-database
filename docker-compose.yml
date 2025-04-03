@@ -3,7 +3,6 @@ services:
     build:
       context: postgresql
       dockerfile: Dockerfile
-    restart: unless-stopped
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     environment:
@@ -22,8 +21,9 @@ services:
     build:
       context: pgadmin4
       dockerfile: Dockerfile
-    restart: unless-stopped
     environment:
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-dtocean@example.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
