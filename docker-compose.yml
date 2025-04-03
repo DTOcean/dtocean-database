@@ -11,6 +11,7 @@ services:
       DTOCEAN_USER_NAME: ${DTOCEAN_USER_NAME:-dtocean_user}
       DTOCEAN_USER_PASSWORD: ${DTOCEAN_USER_PASSWORD}
       DTOCEAN_DB_NAME: ${DTOCEAN_DB_NAME:-dtocean_examples}
+      DTOCEAN_DB_VERSION: ${DTOCEAN_DB_VERSION}
     ports:
       - "5432:5432"
     volumes:
