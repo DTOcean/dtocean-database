@@ -11,7 +11,7 @@ FOR tables IN
     SELECT (table_schema || '.' || table_name) AS schema_table
     FROM information_schema.tables t INNER JOIN information_schema.schemata s 
     ON s.schema_name = t.table_schema 
-    WHERE t.table_schema NOT IN ('pg_catalog', 'information_schema')
+    WHERE t.table_schema NOT IN ('pg_catalog', 'information_schema', 'filter', 'public')
     AND t.table_type NOT IN ('VIEW')
     ORDER BY schema_table
 LOOP
