@@ -1,6 +1,6 @@
 #!/bin/bash
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DTOCEAN_DB_NAME" <<-EOSQL
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DTOCEAN_DB_EXAMPLES_NAME" <<-EOSQL
     SELECT public.db_from_csv(
         '/home/postgres/export',
         'reference.component_type',
@@ -91,5 +91,72 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DTOCEAN_DB_NAME" 
         'project.bathymetry_layer',
         'project.time_series_energy_tidal',
         'project.cable_corridor_bathymetry_layer'
+    );
+EOSQL
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$DTOCEAN_DB_TEMPLATE_NAME" <<-EOSQL
+    SELECT public.db_from_csv(
+        '/home/postgres/export',
+        'reference.component_type',
+        'reference.operations_type',
+        'reference.soil_type',
+        'reference.vehicle_type',
+        'reference.component',
+        'reference.ports',
+        'reference.vehicle',
+        'reference.component_continuous',
+        'reference.component_discrete',
+        'reference.component_shared',
+        'reference.component_cable',
+        'reference.component_mooring_continuous',
+        'reference.component_pile',
+        'reference.component_rope',
+        'reference.component_anchor',
+        'reference.component_collection_point',
+        'reference.component_connector',
+        'reference.component_mooring_discrete',
+        'reference.component_transformer',
+        'reference.constants',
+        'reference.ref_current_drag_coef_rect',
+        'reference.ref_drag_coef_cyl',
+        'reference.ref_drift_coef_float_rect',
+        'reference.ref_holding_capacity_factors_plate_anchors',
+        'reference.ref_line_bcf',
+        'reference.ref_pile_deflection_coefficients',
+        'reference.ref_pile_limiting_values_noncalcareous',
+        'reference.ref_pile_moment_coefficient_sam',
+        'reference.ref_pile_moment_coefficient_sbm',
+        'reference.ref_rectangular_wave_inertia',
+        'reference.ref_subgrade_reaction_coefficient_cohesionless',
+        'reference.ref_subgrade_reaction_coefficient_k1_cohesive',
+        'reference.ref_superline_nylon',
+        'reference.ref_superline_polyester',
+        'reference.ref_superline_steelite',
+        'reference.ref_wake_amplification_factor_cyl',
+        'reference.ref_wind_drag_coef_rect',
+        'reference.soil_type_geotechnical_properties',
+        'reference.equipment_cable_burial',
+        'reference.equipment_divers',
+        'reference.equipment_drilling_rigs',
+        'reference.equipment_excavating',
+        'reference.equipment_hammer',
+        'reference.equipment_mattress',
+        'reference.equipment_rock_filter_bags',
+        'reference.equipment_rov',
+        'reference.equipment_soil_lay_rates',
+        'reference.equipment_soil_penet_rates',
+        'reference.equipment_split_pipe',
+        'reference.equipment_vibro_driver',
+        'reference.operations_limit_cs',
+        'reference.operations_limit_hs',
+        'reference.operations_limit_tp',
+        'reference.operations_limit_ws',
+        'reference.vehicle_helicopter',
+        'reference.vehicle_shared',
+        'reference.vehicle_vessel_anchor_handling',
+        'reference.vehicle_vessel_cable_laying',
+        'reference.vehicle_vessel_cargo',
+        'reference.vehicle_vessel_jackup',
+        'reference.vehicle_vessel_tugboat'
     );
 EOSQL
