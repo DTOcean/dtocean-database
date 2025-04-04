@@ -1,4 +1,4 @@
-name: Build and test
+name: Test container startup
 on:
   push:
     branches: [ main ]
@@ -7,11 +7,7 @@ on:
 
 jobs:
   main:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,7 +25,7 @@ jobs:
           poetry install
       - name: Get dvc hash for export directory
         run: |
-          echo "EXPORT_DVC_HASH=$(poetry run python get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
+          echo "EXPORT_DVC_HASH=$(poetry run python scripts/get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
       - name: Cache dvc directory
         uses: actions/cache@v4
         with:
@@ -44,7 +40,7 @@ jobs:
           echo "DTOCEAN_USER_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "PGADMIN_DEFAULT_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "DTOCEAN_DB_VERSION=mock" >> $GITHUB_ENV
-      - name: Test for successful deployment
+      - name: Start the database container
         shell: bash
         run: |
           set +e
