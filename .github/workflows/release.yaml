@@ -1,0 +1,53 @@
+name: Create release assets
+on:
+  release:
+    types: [published]
+permissions: 
+  contents: write
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Install dependencies
+        run: |
+          poetry install
+      - name: Get dvc hash for export directory
+        run: |
+          echo "EXPORT_DVC_HASH=$(poetry run python scripts/get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
+      - name: Cache dvc directory
+        uses: actions/cache@v4
+        with:
+          path: .dvc
+          key: ${{ runner.os }}-${{ env.EXPORT_DVC_HASH }}
+      - name: Pull database tables
+        run: |
+          poetry run dvc pull -v
+      - name: Create distribution directory
+        run: |
+          mkdir dist
+          cp -r export pgadmin4 postgresql CHANGELOG.md docker-compose.yml LICENSE.txt README.md dist/
+      - name: Set database version variable
+        run: |
+          VERSION=${{ github.event.release.tag_name }}
+          echo 'DTOCEAN_DB_VERSION=${VERSION:1}' > dist/.env
+      - name: Create archives
+        run: |
+          tar czf ../dtocean-database-${{ github.event.release.tag_name }}.tar.gz .
+          7z a -tzip ../dtocean-database-${{ github.event.release.tag_name }}.zip .
+        working-directory: dist
+      - name: Upload assets
+        run: |
+          gh release upload ${{github.event.release.tag_name}} dtocean-database-${{ github.event.release.tag_name }}.tar.gz
+          gh release upload ${{github.event.release.tag_name}} dtocean-database-${{ github.event.release.tag_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
