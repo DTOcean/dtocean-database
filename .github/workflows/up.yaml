@@ -22,7 +22,7 @@ jobs:
         uses: abatilo/actions-poetry@v2
       - name: Install dependencies
         run: |
-          poetry install
+          poetry install --with test
       - name: Get dvc hash for export directory
         run: |
           echo "EXPORT_DVC_HASH=$(poetry run python scripts/get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
@@ -40,11 +40,17 @@ jobs:
           echo "DTOCEAN_USER_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "PGADMIN_DEFAULT_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "DTOCEAN_DB_VERSION=mock" >> $GITHUB_ENV
-      - name: Start the database container
+      - name: Test container startup
         shell: bash
         run: |
           set +e
-          timeout --preserve-status 3m docker compose -f docker-compose.yml up --abort-on-container-failure
+          timeout --preserve-status 150s docker compose -f docker-compose.yml up --abort-on-container-failure
           if [[ $? -ne 130 ]]; then
             exit 1
           fi
+      - name: Test database initialization
+        run: |
+          docker compose -f docker-compose.yml start
+          docker compose ps
+          poetry run pytest tests
+          docker compose -f docker-compose.yml stop

@@ -1,3 +1,9 @@
+# Secrets
 .env
 .env.*
+
+# Pytest
+__pycache__/
+
+# dvc
 /export

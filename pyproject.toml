@@ -17,6 +17,13 @@ dependencies = [
 [tool.poetry]
 package-mode = false
 
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.5"
+psycopg = {extras = ["binary"], version = "^3.2.6"}
+
 [tool.ruff]
 line-length = 80
 
