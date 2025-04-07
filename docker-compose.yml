@@ -39,14 +39,14 @@ services:
 
 configs:
   pgpass:
-    content: "db:5432:*:postgres:$POSTGRES_PASSWORD"
+    content: "db:${POSTGRES_PORT:-5432}:*:postgres:${POSTGRES_PASSWORD:?}"
   servers.json:
     content: |
       {"Servers": {"1": {
         "Group": "Servers",
         "Name": "dtocean",
         "Host": "database",
-        "Port": 5432,
+        "Port": ${POSTGRES_PORT:-5432},
         "MaintenanceDB": "postgres",
         "Username": "postgres",
         "PassFile": "/pgpass",
