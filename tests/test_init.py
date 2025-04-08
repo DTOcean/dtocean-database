@@ -7,11 +7,19 @@ from psycopg.rows import dict_row
 
 
 @pytest.fixture(scope="module")
-def postgres_port():
-    port = os.environ.get("POSTGRES_PORT")
-    if not port:
-        port = "5432"
-    return port
+def db_examples_name():
+    name = os.environ.get("DTOCEAN_DB_EXAMPLES_NAME")
+    if not name:
+        name = "dtocean_examples"
+    return name
+
+
+@pytest.fixture(scope="module")
+def db_template_name():
+    name = os.environ.get("DTOCEAN_DB_TEMPLATE_NAME")
+    if not name:
+        name = "dtocean_template"
+    return name
 
 
 @pytest.fixture(scope="module")
@@ -31,19 +39,11 @@ def dtocean_user_pwd():
 
 
 @pytest.fixture(scope="module")
-def db_examples_name():
-    name = os.environ.get("DTOCEAN_DB_EXAMPLES_NAME")
-    if not name:
-        name = "dtocean_examples"
-    return name
-
-
-@pytest.fixture(scope="module")
-def db_template_name():
-    name = os.environ.get("DTOCEAN_DB_TEMPLATE_NAME")
-    if not name:
-        name = "dtocean_template"
-    return name
+def postgres_port():
+    port = os.environ.get("POSTGRES_PORT")
+    if not port:
+        port = "5432"
+    return port
 
 
 @pytest.mark.parametrize(
