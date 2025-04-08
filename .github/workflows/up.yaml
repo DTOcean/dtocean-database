@@ -38,19 +38,21 @@ jobs:
         run: |
           echo "POSTGRES_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "DTOCEAN_USER_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
-          echo "PGADMIN_DEFAULT_PASSWORD=$(uuidgen)" >> $GITHUB_ENV
           echo "DTOCEAN_DB_VERSION=mock" >> $GITHUB_ENV
       - name: Test container startup
         shell: bash
         run: |
           set +e
-          timeout --preserve-status 150s docker compose -f docker-compose.yml up --abort-on-container-failure
+          timeout --preserve-status 150s docker compose -f docker-compose.yml -f docker-compose.build.yml up --abort-on-container-failure
           if [[ $? -ne 130 ]]; then
             exit 1
           fi
-      - name: Test database initialization
+      - name: Restart container
         run: |
           docker compose -f docker-compose.yml start
           docker compose ps
-          poetry run pytest tests
-          docker compose -f docker-compose.yml stop
+      - name: Test database initialization
+        run: poetry run pytest tests
+      - name: Delete container, images and volumes
+        run: |
+          docker compose -f docker-compose.yml down --rmi 'all' -v

@@ -35,11 +35,11 @@ jobs:
       - name: Create distribution directory
         run: |
           mkdir dist
-          cp -r export pgadmin4 postgresql CHANGELOG.md docker-compose.yml LICENSE.txt README.md dist/
+          cp -r export pgadmin4 postgresql docker-compose.yml docker-compose.build.yml INSTALLATION.md LICENSE.txt dist/
       - name: Set database version variable
         run: |
           VERSION=${{ github.event.release.tag_name }}
-          echo 'DTOCEAN_DB_VERSION=${VERSION:1}' > dist/.env
+          echo "DTOCEAN_DB_VERSION=${VERSION:1}" > dist/.env
       - name: Create archives
         run: |
           tar czf ../dtocean-database-${{ github.event.release.tag_name }}.tar.gz .
