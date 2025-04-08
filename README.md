@@ -1,3 +1,6 @@
+[![release](https://img.shields.io/github/release/DTOcean/dtocean-database-next.svg)](https://github.com/DTOcean/dtocean-database-next/releases/latest)
+[![Test container startup](https://github.com/DTOcean/dtocean-database-next/actions/workflows/up.yaml/badge.svg)](https://github.com/DTOcean/dtocean-database-next/actions/workflows/up.yaml)
+
 # The DTOcean Database
 
 ## Introduction
