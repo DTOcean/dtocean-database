@@ -584,7 +584,7 @@ CREATE FUNCTION filter.sp_filter_cable_corridor_constraint(site_id integer) RETU
 BEGIN
   INSERT INTO "filter"."cable_corridor_constraint" 
   SELECT * FROM "project"."cable_corridor_constraint"
-  WHERE "project"."cable_corridor_constraint".fk_site_id = "site_id"; 
+  WHERE "project"."cable_corridor_constraint"."fk_site_id" = site_id; 
 END;
 $$;
 
@@ -600,7 +600,7 @@ CREATE FUNCTION filter.sp_filter_cable_corridor_site_bathymetry(site_id integer)
 BEGIN
   INSERT INTO "filter"."cable_corridor_bathymetry" 
   SELECT * FROM "project"."cable_corridor_bathymetry"
-  WHERE "project"."cable_corridor_bathymetry".fk_site_id = "site_id";  
+  WHERE "project"."cable_corridor_bathymetry"."fk_site_id" = site_id;  
 END;
 $$;
 
@@ -637,7 +637,7 @@ CREATE FUNCTION filter.sp_filter_constraint(site_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."constraint" 
   SELECT * FROM "project"."constraint"
-  WHERE "project"."constraint".fk_site_id = "site_id"; 
+  WHERE "project"."constraint"."fk_site_id" = site_id; 
 END;
 $$;
 
@@ -699,7 +699,7 @@ CREATE FUNCTION filter.sp_filter_device_floating(device_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."device_floating" 
   SELECT * FROM "project"."device_floating"
-  WHERE "project"."device_floating".fk_device_id = "device_id"; 
+  WHERE "project"."device_floating"."fk_device_id" = device_id; 
 END;
 $$;
 
@@ -715,7 +715,7 @@ CREATE FUNCTION filter.sp_filter_device_shared(device_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."device_shared" 
   SELECT * FROM "project"."device_shared"
-  WHERE "project"."device_shared".fk_device_id = "device_id"; 
+  WHERE "project"."device_shared"."fk_device_id" = device_id; 
 END;
 $$;
 
@@ -731,7 +731,7 @@ CREATE FUNCTION filter.sp_filter_device_tidal(device_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."device_tidal" 
   SELECT * FROM "project"."device_tidal"
-  WHERE "project"."device_tidal".fk_device_id = "device_id"; 
+  WHERE "project"."device_tidal"."fk_device_id" = device_id; 
 END;
 $$;
 
@@ -747,7 +747,7 @@ CREATE FUNCTION filter.sp_filter_device_tidal_power_performance(device_id intege
 BEGIN
   INSERT INTO "filter"."device_tidal_power_performance" 
   SELECT * FROM "project"."device_tidal_power_performance"
-  WHERE "project"."device_tidal_power_performance".fk_device_id = "device_id"; 
+  WHERE "project"."device_tidal_power_performance"."fk_device_id" = device_id; 
 END;
 $$;
 
@@ -763,7 +763,7 @@ CREATE FUNCTION filter.sp_filter_device_wave(device_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."device_wave" 
   SELECT * FROM "project"."device_wave"
-  WHERE "project"."device_wave".fk_device_id = "device_id"; 
+  WHERE "project"."device_wave"."fk_device_id" = device_id; 
 END;
 $$;
 
@@ -779,7 +779,7 @@ CREATE FUNCTION filter.sp_filter_lease_area(site_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."lease_area" 
   SELECT * FROM "project"."lease_area"
-  WHERE "project"."lease_area".fk_site_id = "site_id"; 
+  WHERE "project"."lease_area"."fk_site_id" = site_id; 
 END;
 $$;
 
@@ -795,7 +795,7 @@ CREATE FUNCTION filter.sp_filter_site_bathymetry(site_id integer) RETURNS void
 BEGIN
   INSERT INTO "filter"."bathymetry" 
   SELECT * FROM "project"."bathymetry"
-  WHERE "project"."bathymetry".fk_site_id = "site_id"; 
+  WHERE "project"."bathymetry"."fk_site_id" = site_id; 
 END;
 $$;
 
@@ -884,7 +884,7 @@ BEGIN
      INNER JOIN project.time_series_energy_tidal 
      ON (project.time_series_energy_tidal.fk_bathymetry_id = project.bathymetry.id)
      WHERE 
-       project.bathymetry.fk_site_id = site_id; 
+       project.bathymetry."fk_site_id" = site_id; 
   
 END;
 $$;
@@ -901,7 +901,7 @@ CREATE FUNCTION filter.sp_filter_site_time_series_energy_wave(site_id integer) R
 BEGIN
   INSERT INTO "filter"."time_series_energy_wave" 
   SELECT * FROM "project"."time_series_energy_wave"
-  WHERE "project"."time_series_energy_wave"."fk_site_id" = "site_id"; 
+  WHERE "project"."time_series_energy_wave"."fk_site_id" = site_id; 
 END;
 $$;
 
@@ -917,7 +917,7 @@ CREATE FUNCTION filter.sp_filter_site_time_series_om_tidal(site_id integer) RETU
 BEGIN
   INSERT INTO "filter"."time_series_om_tidal" 
   SELECT * FROM "project"."time_series_om_tidal"
-  WHERE "project"."time_series_om_tidal"."fk_site_id" = "site_id"; 
+  WHERE "project"."time_series_om_tidal"."fk_site_id" = site_id; 
 END;
 $$;
 
@@ -933,7 +933,7 @@ CREATE FUNCTION filter.sp_filter_site_time_series_om_wave(site_id integer) RETUR
 BEGIN
   INSERT INTO "filter"."time_series_om_wave" 
   SELECT * FROM "project"."time_series_om_wave"
-  WHERE "project"."time_series_om_wave"."fk_site_id" = "site_id";
+  WHERE "project"."time_series_om_wave"."fk_site_id" = site_id;
 END;
 $$;
 
@@ -949,7 +949,7 @@ CREATE FUNCTION filter.sp_filter_site_time_series_om_wind(site_id integer) RETUR
 BEGIN
   INSERT INTO "filter"."time_series_om_wind" 
   SELECT * FROM "project"."time_series_om_wind"
-  WHERE "project"."time_series_om_wind"."fk_site_id" = "site_id"; 
+  WHERE "project"."time_series_om_wind"."fk_site_id" = site_id; 
 END;
 $$;
 
