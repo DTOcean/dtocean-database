@@ -1,4 +1,5 @@
 [core]
+    analytics = false
     remote = public
 ['remote "admin"']
     url = s3://dtocean/database
