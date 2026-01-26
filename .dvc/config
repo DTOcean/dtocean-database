@@ -1,7 +1,7 @@
 [core]
     remote = public
 ['remote "admin"']
-    url = s3://dtocean-database
+    url = s3://dtocean/database
     region = eu-west-1
 ['remote "public"']
-    url = https://d2re9rsnnkm912.cloudfront.net
+    url = https://d2re9rsnnkm912.cloudfront.net/database
