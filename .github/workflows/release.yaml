@@ -1,13 +1,54 @@
-name: Create release assets
+name: Release
 on:
-  release:
-    types: [published]
-permissions: 
+  workflow_dispatch:
+permissions:
   contents: write
 
 jobs:
-  main:
+  bump:
     runs-on: ubuntu-latest
+    outputs:
+      bumped: ${{ steps.bump.outputs.bumped }}
+      current-version: ${{ steps.bump.outputs.current-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Bump version
+        id: bump
+        uses: callowayproject/bump-my-version@master
+        env:
+          BUMPVERSION_TAG: "true"
+        with:
+          args: patch
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+  changelog:
+    runs-on: ubuntu-latest
+    needs: bump
+    outputs:
+      changes: ${{ steps.changelog.outputs.changes }}
+    if: needs.bump.outputs.bumped == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }} 
+      - name: Update CHANGELOG
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          tag: v${{ needs.bump.outputs.current-version }}
+        continue-on-error: true
+      - name: Commit CHANGELOG.md
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: main
+          commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
+          file_pattern: CHANGELOG.md
+  release:
+    runs-on: ubuntu-latest
+    needs: [bump, changelog]
+    if: needs.bump.outputs.bumped == 'true'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,9 +86,12 @@ jobs:
           tar czf ../dtocean-database-${{ github.event.release.tag_name }}.tar.gz .
           7z a -tzip ../dtocean-database-${{ github.event.release.tag_name }}.zip .
         working-directory: dist
-      - name: Upload assets
-        run: |
-          gh release upload ${{github.event.release.tag_name}} dtocean-database-${{ github.event.release.tag_name }}.tar.gz
-          gh release upload ${{github.event.release.tag_name}} dtocean-database-${{ github.event.release.tag_name }}.zip
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
+      - name: Create release
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          allowUpdates: true
+          makeLatest: true
+          tag: v${{ needs.bump.outputs.current-version }}
+          name: 'Version ${{ needs.bump.outputs.current-version }} Release'
+          body: ${{ needs.changelog.outputs.changes }}
+          artifacts: "dtocean-database-${{ github.event.release.tag_name }}.tar.gz,dtocean-database-${{ github.event.release.tag_name }}.zip"

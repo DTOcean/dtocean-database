@@ -1,17 +1,17 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Calendar Versioning](https://calver.org/).
 
-## [2026.01.0] - 2026-01-20
+## [v2026.01.0] - 2026-01-20
 
 ### Fixed
 
 - Fixed inconsistent quoting in function definitions
 
-## [2025.04.0] - 2025-04-08
+## [v2025.04.0] - 2025-04-08
 
 ### Added
 
@@ -34,7 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Replace basic tidal example with Takoma Narrows data
 - Update README to reflect changes
 
-## [2.0.0] - 2019-03-12
+## [v2.0.0] - 2019-03-12
 
 ### Added
 
@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Removed columns which were unused by the DTOcean software.
 - Removed original dummy wave energy device and site examples.
 
-## [1.0.0] - 2016-12-19
+## [v1.0.0] - 2016-12-19
 
 ### Added
 
