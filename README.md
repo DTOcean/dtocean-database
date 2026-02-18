@@ -43,7 +43,7 @@ PostgreSQL.
 
 Instructions for preparing data to be stored in the database and a description
 of the database schema can be found in the [dtocean
-documentation](https://dtocean.github.io/user/data_preparation.html).
+documentation](https://dtocean.github.io/dtocean/user/data_preparation.html).
 
 ## Development
 
