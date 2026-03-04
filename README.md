@@ -99,6 +99,17 @@ call the following command to run the tests:
 poetry run pytest tests
 ```
 
+## Updating Data
+
+To export any changes in the database tables into the repository, run the
+following query as admin:
+
+```sql
+SELECT public.db_to_csv('/home/postgres/export');
+```
+
+This will update the CSV tables in the `export` directory.
+
 ## Contributing
 
 Contributions are gratefully received and should be provided using pull
