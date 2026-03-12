@@ -3,14 +3,14 @@
 ## Overview
 
 These instructions are for installing a [PostgreSQL][PostgreSQL] relational
-database management system using [docker containers][docker]. Additionally, the
-schemas and data for the DTOcean example and template databases are loaded,
-which include the [PostGIS][PostGIS] geospatial extension. To connect to the
-database use your computer's local hostname and the configured port (e.g.
+database management system using [docker containers][containers]. Additionally,
+the schemas and data for the DTOcean example and template databases are loaded,
+which include the [PostGIS] geospatial extension. To connect to the database
+use your computer's local hostname and the configured port (e.g.
 `'host=localhost port=5432'`).
 
-The [pgAdmin][pgAdmin] database administration software is also installed and
-can be accessed via a web browser using your computer's local hostname and the
+The [pgAdmin] database administration software is also installed and can be
+accessed via a web browser using your computer's local hostname and the
 configured port (e.g. `localhost:8080`).
 
 ## Prerequisites
@@ -24,18 +24,20 @@ latest release page:
 
 Decompress the archive to a location of your choosing.
 
-### Container management software
+### Docker container management
 
-A container management system with support for [Docker Compose][Compose] is
-required. On Windows computers, [Docker Desktop][Desktop] is recommended. To
+The [Docker] container management system is recommended for reading the [Docker
+Compose][Compose] files used in the installation. Other container management
+software can be used with compose files, such as [podman], however there are
+still some syntax and operational differences that stop podman being a drop in
+replacement for docker at this time.
+
+On Windows computers, [Docker Desktop][Desktop] is recommended. To
 avoid signing up in order to download Docker Desktop, use the link below:
 
 <https://docs.docker.com/get-started/introduction/get-docker-desktop/>
 
-Other container management systems can be used, such as [podman][podman],
-although the performance of the database using podman on Windows was much
-slower than Docker Desktop. For other OSes this performance deficit may not
-occur.
+On Linux, Docker Desktop or [Docker Engine][Engine] should be installed.
 
 ### Terminal
 
@@ -81,11 +83,8 @@ set POSTGRES_PASSWORD="postgres"
 $env:POSTGRES_PASSWORD="postgres"
 ```
 
-#### Bash (Linux)
-
-```sh
-POSTGRES_PASSWORD="postgres"
-```
+On Linux, it is recommended to set terminal variables alongside the docker
+command (see below).
 
 Alternatively, variable values can be set in the included `.env` file. A
 description of the syntax of this file is available at the following link:
@@ -98,6 +97,8 @@ file to any version control system. That is a [bad thing to do][bad].
 
 ### Build and start the container
 
+**WHEN USING LINUX, RUN AS ROOT OR PREPEND THE `docker` COMMANDS BELOW WITH `sudo`**
+
 Using the same terminal session with the environment variables set (as
 described in the previous section), move the working directory to the root of
 the installation files folder, e.g.
@@ -106,15 +107,21 @@ the installation files folder, e.g.
 cd path/to/downloads/dtocean-database-v2025.04.0
 ```
 
-Now use Docker Compose to build and start the container:
+Now use Docker Compose to build and start the container. On Windows:
 
 ```sh
 docker compose -f docker-compose.yml -f docker-compose.build.yml up -d
 ```
 
+For Linux, including the required variables:
+
+```sh
+POSTGRES_PASSWORD="postgres" DTOCEAN_USER_PASSWORD="dtocean" docker compose -f docker-compose.yml -f docker-compose.build.yml up -d
+```
+
 This starts the container in 'detached' mode (due to the `-d` flag), which will
 run as a background process. To check that the container is working correctly,
-use the `docker ps` command, which should produce output similar to the
+use the `docker ps` (or command, which should produce output similar to the
 following:
 
 ```sh
@@ -167,11 +174,13 @@ associated images in the Images view and, finally, the volumes in the Volumes
 view.
 
 [PostgreSQL]: https://www.postgresql.org/
-[docker]: https://www.docker.com/resources/what-container/
+[containers]: https://www.docker.com/resources/what-container/
 [PostGIS]: https://postgis.net/
 [pgAdmin]: https://www.pgadmin.org/
+[Docker]: https://www.docker.com/resources/what-container/
 [Compose]: https://docs.docker.com/compose/
 [Desktop]: https://www.docker.com/products/docker-desktop/
+[Engine]: https://docs.docker.com/engine/
 [podman]: https://podman.io/
 [cmd]: https://en.wikipedia.org/wiki/Cmd.exe
 [PowerShell]: https://learn.microsoft.com/en-us/powershell/
