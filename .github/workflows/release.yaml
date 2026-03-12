@@ -10,9 +10,10 @@ jobs:
     outputs:
       bumped: ${{ steps.bump.outputs.bumped }}
       current-version: ${{ steps.bump.outputs.current-version }}
+      tag: v${{ steps.bump.outputs.current-version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Bump version
         id: bump
         uses: callowayproject/bump-my-version@master
@@ -29,7 +30,7 @@ jobs:
     if: needs.bump.outputs.bumped == 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }} 
       - name: Update CHANGELOG
@@ -50,15 +51,15 @@ jobs:
     needs: [bump, changelog]
     if: needs.bump.outputs.bumped == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.12
       - name: Install poetry
-        uses: abatilo/actions-poetry@v2
+        uses: abatilo/actions-poetry@v3
       - name: Install dependencies
         run: |
           poetry install
@@ -66,7 +67,7 @@ jobs:
         run: |
           echo "EXPORT_DVC_HASH=$(poetry run python scripts/get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
       - name: Cache dvc directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .dvc
           key: ${{ runner.os }}-${{ env.EXPORT_DVC_HASH }}
@@ -79,19 +80,19 @@ jobs:
           cp -r export pgadmin4 postgresql docker-compose.yml docker-compose.build.yml INSTALLATION.md LICENSE.txt dist/
       - name: Set database version variable
         run: |
-          VERSION=${{ github.event.release.tag_name }}
+          VERSION=${{ needs.bump.outputs.tag }}
           echo "DTOCEAN_DB_VERSION=${VERSION:1}" > dist/.env
       - name: Create archives
         run: |
-          tar czf ../dtocean-database-${{ github.event.release.tag_name }}.tar.gz .
-          7z a -tzip ../dtocean-database-${{ github.event.release.tag_name }}.zip .
+          tar czf ../dtocean-database-${{ needs.bump.outputs.tag }}.tar.gz .
+          7z a -tzip ../dtocean-database-${{ needs.bump.outputs.tag }}.zip .
         working-directory: dist
       - name: Create release
         uses: ncipollo/release-action@v1.20.0
         with:
           allowUpdates: true
           makeLatest: true
-          tag: v${{ needs.bump.outputs.current-version }}
+          tag: ${{ needs.bump.outputs.tag }}
           name: 'Version ${{ needs.bump.outputs.current-version }} Release'
           body: ${{ needs.changelog.outputs.changes }}
-          artifacts: "dtocean-database-${{ github.event.release.tag_name }}.tar.gz,dtocean-database-${{ github.event.release.tag_name }}.zip"
+          artifacts: "dtocean-database-${{ needs.bump.outputs.tag }}.tar.gz,dtocean-database-${{ needs.bump.outputs.tag }}.zip"

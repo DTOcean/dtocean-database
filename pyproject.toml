@@ -38,7 +38,7 @@ parse = """(?x)                     # Verbose mode
 """
 serialize = ["{release}.{patch}"]
 commit = true
-message = "chore: bump version {current_version} → {new_version}"
+message = "build: bump version {current_version} → {new_version}"
 
 [tool.bumpversion.parts.release]
 calver_format = "{YYYY}.{0M}"

@@ -9,17 +9,17 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - name: Set up Docker Compose
-        uses: docker/setup-compose-action@v1
+        uses: docker/setup-compose-action@v2
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.12
       - name: Install poetry
-        uses: abatilo/actions-poetry@v2
+        uses: abatilo/actions-poetry@v3
       - name: Install dependencies
         run: |
           poetry install --with test
@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "EXPORT_DVC_HASH=$(poetry run python scripts/get_dvc_md5.py export.dvc)" >> $GITHUB_ENV
       - name: Cache dvc directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .dvc
           key: ${{ runner.os }}-${{ env.EXPORT_DVC_HASH }}
