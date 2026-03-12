@@ -1,6 +1,6 @@
 [project]
 name = "dtocean-database"
-version = "2026.01.0"
+version = "2026.03.0"
 description = "A database for storing persistent data, such as ocean energy converter (OEC) designs, metocean observations for sites, and reference data for electrical, mooring and foundations components, ports, vessels, etc."
 authors = [
     {name = "Mathew Topper",email = "damm_horse@yahoo.co.uk"}
